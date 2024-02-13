@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-require "database_cleaner/active_record/transaction"
-::DatabaseCleaner::ActiveRecord::Transaction.prepend(
+transaction_class = ::DatabaseCleaner::ActiveRecord::Transaction if defined?(::DatabaseCleaner::ActiveRecord::Transaction)
+transaction_class = ::DatabaseCleaner::Sequel::Transaction if defined?(::DatabaseCleaner::Sequel::Transaction)
+
+transaction_class.prepend(
   Module.new do
     def start
       super
